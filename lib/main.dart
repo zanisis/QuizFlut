@@ -1,4 +1,4 @@
-import 'package:edproject/pages/auth_page.dart';
+import 'package:edproject/pages/splash_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const AuthPage(),
+      home: const SplashPage(),
     );
   }
 }
