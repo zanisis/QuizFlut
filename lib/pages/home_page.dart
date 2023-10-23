@@ -2,6 +2,7 @@ import 'package:edproject/dataSource/baner_datasource.dart';
 import 'package:edproject/dataSource/course_dataSource.dart';
 import 'package:edproject/model/banner_model.dart';
 import 'package:edproject/model/course_model.dart';
+import 'package:edproject/widget/banner_list_widget.dart';
 import 'package:edproject/widget/course_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -78,9 +79,7 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(
                 height: 25,
               ),
-              courseResponse == null
-                  ? const Center(child: CircularProgressIndicator())
-                  : courseMenu(),
+              courseMenu(),
               const SizedBox(height: 24),
               bannerUpdated()
             ],
@@ -104,23 +103,7 @@ class _HomePageState extends State<HomePage> {
             height: 146,
             child: bannerResponse == null
                 ? const Center(child: CircularProgressIndicator())
-                : ListView.separated(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      final bannerData = bannerResponse?.data?[index];
-
-                      return ClipRRect(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                        child: Image.network(
-                          bannerData?.eventImage ?? '',
-                        ),
-                      );
-                    },
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(width: 28),
-                    itemCount: bannerResponse!.data!.length))
+                : BannerListWidget(bannerList: bannerResponse?.data ?? []))
       ],
     );
   }
@@ -139,7 +122,9 @@ class _HomePageState extends State<HomePage> {
             TextButton(onPressed: () {}, child: const Text('Lihat Semua'))
           ],
         ),
-        CourseListWidget(courseList: courseResponse?.data ?? [])
+        courseResponse == null
+            ? const Center(child: CircularProgressIndicator())
+            : CourseListWidget(courseList: courseResponse?.data ?? [])
       ],
     );
   }
