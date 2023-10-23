@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 
 class CourseListWidget extends StatelessWidget {
   final List<CourseData> courseList;
-  const CourseListWidget({super.key, required this.courseList});
+  final bool isAll;
+  const CourseListWidget(
+      {super.key, required this.courseList, required this.isAll});
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
         shrinkWrap: true,
-        itemCount: 3,
+        itemCount: isAll ? courseList.length : 3,
         physics: const NeverScrollableScrollPhysics(),
         separatorBuilder: (context, index) => const SizedBox(height: 15),
         itemBuilder: (context, index) {

@@ -2,6 +2,7 @@ import 'package:edproject/dataSource/baner_datasource.dart';
 import 'package:edproject/dataSource/course_dataSource.dart';
 import 'package:edproject/model/banner_model.dart';
 import 'package:edproject/model/course_model.dart';
+import 'package:edproject/pages/course_all_page.dart';
 import 'package:edproject/widget/banner_list_widget.dart';
 import 'package:edproject/widget/course_list_widget.dart';
 import 'package:flutter/material.dart';
@@ -119,12 +120,20 @@ class _HomePageState extends State<HomePage> {
                     fontSize: 16,
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700)),
-            TextButton(onPressed: () {}, child: const Text('Lihat Semua'))
+            TextButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CourseAllPages()));
+                },
+                child: const Text('Lihat Semua'))
           ],
         ),
         courseResponse == null
             ? const Center(child: CircularProgressIndicator())
-            : CourseListWidget(courseList: courseResponse?.data ?? [])
+            : CourseListWidget(
+                courseList: courseResponse?.data ?? [], isAll: false)
       ],
     );
   }
