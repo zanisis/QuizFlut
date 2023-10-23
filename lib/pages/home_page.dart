@@ -82,41 +82,46 @@ class _HomePageState extends State<HomePage> {
                   ? const Center(child: CircularProgressIndicator())
                   : courseMenu(),
               const SizedBox(height: 24),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Terbaru',
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w700)),
-                  const SizedBox(height: 12),
-                  SizedBox(
-                      height: 146,
-                      child: bannerResponse == null
-                          ? const Center(child: CircularProgressIndicator())
-                          : ListView.separated(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                final bannerData = bannerResponse?.data?[index];
-                                return ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                  child: Image.network(
-                                    bannerData?.eventImage ?? '',
-                                  ),
-                                );
-                              },
-                              separatorBuilder: (context, index) =>
-                                  const SizedBox(width: 28),
-                              itemCount: bannerResponse!.data!.length))
-                ],
-              )
+              bannerUpdated()
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Column bannerUpdated() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Terbaru',
+            style: TextStyle(
+                fontSize: 16,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w700)),
+        const SizedBox(height: 12),
+        SizedBox(
+            height: 146,
+            child: bannerResponse == null
+                ? const Center(child: CircularProgressIndicator())
+                : ListView.separated(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      final bannerData = bannerResponse?.data?[index];
+
+                      return ClipRRect(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                        child: Image.network(
+                          bannerData?.eventImage ?? '',
+                        ),
+                      );
+                    },
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(width: 28),
+                    itemCount: bannerResponse!.data!.length))
+      ],
     );
   }
 

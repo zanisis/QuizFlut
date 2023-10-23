@@ -1,20 +1,23 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-Future<Response> request(OptionsRequest options) async {
-  final path = options.endpointPath[0];
-  final method = options.endpointPath[1];
+Future<Response> request(OptionsRequest optionsReq) async {
+  final method = optionsReq.endpointPath[0];
+  final path = optionsReq.endpointPath[1];
 
   final optionsSetup = BaseOptions(
       baseUrl: 'https://edspert.widyaedu.com',
       connectTimeout: const Duration(seconds: 5),
       receiveTimeout: const Duration(seconds: 3),
-      headers: {"x-api-key": "18be70c0-4e4d-44ff-a475-50c51ece99a0"});
+      headers: {"x-api-key": dotenv.env["API_KEY"]});
+
   final dio = Dio(optionsSetup);
+
   try {
     final response = await dio.request(path,
-        data: options.body, options: Options(method: method));
+        data: optionsReq.body, options: Options(method: method));
     return response;
   } catch (e, stackTrace) {
     log(e.toString(), stackTrace: stackTrace, error: e);
