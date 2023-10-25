@@ -5,7 +5,9 @@ import 'package:edproject/utils/api_request.dart';
 class BannerDataSource {
   Future<BannerResponse> getBanner() async {
     final response = await request(
-        OptionsRequest(endpointPath: EndpointConstants.bannerGet));
+        OptionsRequest(endpointPath: EndpointConstants.bannerGet, queryParam: {
+      "limit": 5,
+    }));
 
     final bannerResponse = BannerResponse.fromJson(response.data);
 

@@ -30,9 +30,10 @@ class _CourseAllPagesState extends State<CourseAllPages> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xffF3F7F8),
       appBar: AppBar(
-          backgroundColor: Color(0xff3A7FD5),
-          iconTheme: IconThemeData(color: Colors.white),
+          backgroundColor: const Color(0xff3A7FD5),
+          iconTheme: const IconThemeData(color: Colors.white),
           title: const Text('Pilih Pelajaran',
               style: TextStyle(
                   color: Colors.white,
@@ -41,7 +42,7 @@ class _CourseAllPagesState extends State<CourseAllPages> {
                   fontWeight: FontWeight.w700))),
       body: SingleChildScrollView(
           child: Container(
-              padding: EdgeInsets.all(22),
+              padding: const EdgeInsets.all(22),
               child: CourseListWidget(
                 courseList: courseResponse?.data ?? [],
                 isAll: true,

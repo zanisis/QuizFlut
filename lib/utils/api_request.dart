@@ -16,8 +16,12 @@ Future<Response> request(OptionsRequest optionsReq) async {
   final dio = Dio(optionsSetup);
 
   try {
-    final response = await dio.request(path,
-        data: optionsReq.body, options: Options(method: method));
+    final response = await dio.request(
+      path,
+      data: optionsReq.body,
+      queryParameters: optionsReq.queryParam,
+      options: Options(method: method),
+    );
     return response;
   } catch (e, stackTrace) {
     log(e.toString(), stackTrace: stackTrace, error: e);
@@ -28,17 +32,15 @@ Future<Response> request(OptionsRequest optionsReq) async {
 class OptionsRequest {
   BodyRequest? body;
   List<String> endpointPath;
+  Map<String, dynamic>? queryParam;
 
-  OptionsRequest({
-    this.body,
-    required this.endpointPath,
-  });
+  OptionsRequest({this.body, required this.endpointPath, this.queryParam});
 }
 
 class BodyRequest {
-  String? adata;
+  String? data;
 
   BodyRequest({
-    this.adata,
+    this.data,
   });
 }
