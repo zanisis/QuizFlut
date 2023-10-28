@@ -1,36 +1,19 @@
-import 'package:edproject/dataSource/course_datasource.dart';
-import 'package:edproject/model/course_model.dart';
+import 'dart:developer';
+
+import 'package:edproject/bloc/course/course_bloc.dart';
 import 'package:edproject/widget/course_list_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CourseAllPages extends StatefulWidget {
-  const CourseAllPages({super.key});
+class CourseAllPages extends StatelessWidget {
+  final CourseBloc courseBloc = CourseBloc();
 
-  @override
-  State<CourseAllPages> createState() => _CourseAllPagesState();
-}
+  CourseAllPages({super.key});
 
-class _CourseAllPagesState extends State<CourseAllPages> {
-  final courseResponseData = CourseDataSource();
-
-  CourseResponse? courseResponse;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    getBanner();
-    super.initState();
-  }
-
-  void getBanner() async {
-    courseResponse = await courseResponseData.getCourse();
-    setState(() {});
-  }
-
+  // void getBanner() async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffF3F7F8),
       appBar: AppBar(
           backgroundColor: const Color(0xff3A7FD5),
           iconTheme: const IconThemeData(color: Colors.white),
@@ -42,10 +25,21 @@ class _CourseAllPagesState extends State<CourseAllPages> {
                   fontWeight: FontWeight.w700))),
       body: SingleChildScrollView(
           child: Container(
-              padding: const EdgeInsets.all(22),
-              child: CourseListWidget(
-                courseList: courseResponse?.data ?? [],
-                isAll: true,
+              padding: EdgeInsets.all(22),
+              child: BlocBuilder<CourseBloc, CourseState>(
+                builder: (context, state) {
+                  if (state is CourseFailed) {
+                    return Center(child: Text(state.message ?? ''));
+                  }
+                  if (state is CourseSuccess) {
+                    return CourseListWidget(
+                      courseList: state.courseResponse.data ?? [],
+                      isAll: true,
+                    );
+                  }
+
+                  return const Center(child: CircularProgressIndicator());
+                },
               ))),
     );
   }

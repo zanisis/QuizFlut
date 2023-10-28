@@ -1,12 +1,11 @@
-import 'package:edproject/dataSource/baner_datasource.dart';
-import 'package:edproject/dataSource/course_dataSource.dart';
-import 'package:edproject/model/banner_model.dart';
-import 'package:edproject/model/course_model.dart';
+import 'package:edproject/bloc/banner/banner_bloc.dart';
+import 'package:edproject/bloc/course/course_bloc.dart';
 import 'package:edproject/pages/course_all_page.dart';
 import 'package:edproject/widget/banner_list_widget.dart';
 import 'package:edproject/widget/bottom_navbar_widget.dart';
 import 'package:edproject/widget/course_list_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,25 +16,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final courseResponseData = CourseDataSource();
-  final bannerResponseData = BannerDataSource();
-
   int selectNavIndex = 0;
-
-  CourseResponse? courseResponse;
-  BannerResponse? bannerResponse;
 
   @override
   void initState() {
     // TODO: implement initState
-    getInit();
     super.initState();
-  }
-
-  void getInit() async {
-    courseResponse = await courseResponseData.getCourse();
-    bannerResponse = await bannerResponseData.getBanner();
-    setState(() {});
   }
 
   void handleNavSelectedIndex(int index) {
@@ -382,41 +368,68 @@ class _HomePageState extends State<HomePage> {
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w700)),
         const SizedBox(height: 12),
-        SizedBox(
-            height: 146,
-            child: bannerResponse == null
-                ? const Center(child: CircularProgressIndicator())
-                : BannerListWidget(bannerList: bannerResponse?.data ?? []))
+        BlocBuilder<BannerBloc, BannerState>(
+          builder: (context, state) {
+            if (state is BannerFailed) {
+              return Center(child: Text(state.message ?? ''));
+            }
+            if (state is BannerSuccess) {
+              return SizedBox(
+                height: 146,
+                child: BannerListWidget(
+                  bannerList: state.bannerResponse.data ?? [],
+                ),
+              );
+            }
+
+            return const Center(child: CircularProgressIndicator());
+          },
+        )
       ],
     );
   }
 
-  Column courseMenu() {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  BlocBuilder<CourseBloc, CourseState> courseMenu() {
+    return BlocBuilder<CourseBloc, CourseState>(
+      builder: (context, state) {
+        return Column(
           children: [
-            const Text('Pilih Pelajaran',
-                style: TextStyle(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Pilih Pelajaran',
+                  style: TextStyle(
                     fontSize: 16,
                     fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w700)),
-            TextButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const CourseAllPages()));
-                },
-                child: const Text('Lihat Semua'))
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CourseAllPages(),
+                        ),
+                      );
+                    },
+                    child: const Text('Lihat Semua'))
+              ],
+            ),
+            if (state is CourseFailed) ...[
+              Center(child: Text(state.message ?? ''))
+            ] else if (state is CourseSuccess) ...[
+              CourseListWidget(
+                courseList: state.courseResponse.data ?? [],
+                isAll: false,
+              )
+            ] else ...[
+              const Center(child: CircularProgressIndicator())
+            ]
           ],
-        ),
-        courseResponse == null
-            ? const Center(child: CircularProgressIndicator())
-            : CourseListWidget(
-                courseList: courseResponse?.data ?? [], isAll: false)
-      ],
+        );
+      },
     );
   }
 
