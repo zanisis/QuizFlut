@@ -1,5 +1,5 @@
 import 'package:edproject/dataSource/exercise_course_datasource.dart';
-import 'package:edproject/model/exercise_course_modal.dart';
+import 'package:edproject/model/exercise_course_model.dart';
 import 'package:edproject/widget/exercise_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';

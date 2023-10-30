@@ -1,4 +1,4 @@
-import 'package:edproject/model/exercise_course_modal.dart';
+import 'package:edproject/model/exercise_course_model.dart';
 import 'package:flutter/material.dart';
 
 class ExerciseListWidget extends StatelessWidget {
@@ -20,7 +20,7 @@ class ExerciseListWidget extends StatelessWidget {
         final exerciseData = exerciseCourseResponse?.data?[index];
 
         return Card(
-          color: Color(0xFFFFFFFF),
+          color: const Color(0xFFFFFFFF),
           child: Container(
             padding: const EdgeInsets.all(12),
             child: Column(

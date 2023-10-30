@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:edproject/bloc/course/course_bloc.dart';
 import 'package:edproject/widget/course_list_widget.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +8,6 @@ class CourseAllPages extends StatelessWidget {
 
   CourseAllPages({super.key});
 
-  // void getBanner() async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +22,7 @@ class CourseAllPages extends StatelessWidget {
                   fontWeight: FontWeight.w700))),
       body: SingleChildScrollView(
           child: Container(
-              padding: EdgeInsets.all(22),
+              padding: const EdgeInsets.all(22),
               child: BlocBuilder<CourseBloc, CourseState>(
                 builder: (context, state) {
                   if (state is CourseFailed) {
