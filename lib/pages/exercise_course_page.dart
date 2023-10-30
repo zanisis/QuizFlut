@@ -4,18 +4,18 @@ import 'package:edproject/widget/exercise_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class ExercisePage extends StatefulWidget {
+class ExerciseCoursePage extends StatefulWidget {
   final String courseId;
   final String courseName;
 
-  const ExercisePage(
+  const ExerciseCoursePage(
       {super.key, required this.courseId, required this.courseName});
 
   @override
-  State<ExercisePage> createState() => _ExercisePageState();
+  State<ExerciseCoursePage> createState() => _ExerciseCoursePageState();
 }
 
-class _ExercisePageState extends State<ExercisePage> {
+class _ExerciseCoursePageState extends State<ExerciseCoursePage> {
   final exerciseCourseDataSource = ExerciseCourseDataSource();
 
   ExerciseCourseResponse? exerciseCourseResponse;
@@ -30,8 +30,8 @@ class _ExercisePageState extends State<ExercisePage> {
   }
 
   void getInit() async {
-    exerciseCourseResponse =
-        await exerciseCourseDataSource.getExercise(courseId: widget.courseId);
+    exerciseCourseResponse = await exerciseCourseDataSource.getExerciseCourse(
+        courseId: widget.courseId);
     setState(() {});
   }
 

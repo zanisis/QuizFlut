@@ -1,5 +1,5 @@
 import 'package:edproject/model/course_model.dart';
-import 'package:edproject/pages/exercise_page.dart';
+import 'package:edproject/pages/exercise_course_page.dart';
 import 'package:flutter/material.dart';
 
 class CourseListWidget extends StatelessWidget {
@@ -23,7 +23,7 @@ class CourseListWidget extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ExercisePage(
+                  builder: (context) => ExerciseCoursePage(
                     courseName: dataCouse.courseName ?? '',
                     courseId: dataCouse.courseId ?? '',
                   ),

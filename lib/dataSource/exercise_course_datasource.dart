@@ -3,7 +3,8 @@ import 'package:edproject/model/exercise_course_model.dart';
 import 'package:edproject/utils/api_request.dart';
 
 class ExerciseCourseDataSource {
-  Future<ExerciseCourseResponse> getExercise({required String courseId}) async {
+  Future<ExerciseCourseResponse> getExerciseCourse(
+      {required String courseId}) async {
     final response = await request(OptionsRequest(
         endpointPath: EndpointConstants.exerciseCourseGet,
         queryParam: {
