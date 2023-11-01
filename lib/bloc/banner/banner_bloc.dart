@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:edproject/dataSource/baner_datasource.dart';
@@ -14,6 +16,7 @@ class BannerBloc extends Bloc<BannerEvent, BannerState> {
       emit(BannerLoading());
 
       final bannerResponse = await bannerDataSource.getBanner();
+      log("response: ${bannerResponse.toJson()}");
 
       emit(BannerSuccess(bannerResponse: bannerResponse));
     });

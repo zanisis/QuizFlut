@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:ffi';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -18,7 +19,9 @@ Future<Response> request(OptionsRequest optionsReq) async {
   try {
     final response = await dio.request(
       path,
-      data: optionsReq.body,
+      data: optionsReq.isFormData != null
+          ? FormData.fromMap(optionsReq.body ?? {})
+          : optionsReq.body,
       queryParameters: optionsReq.queryParam,
       options: Options(method: method),
     );
@@ -30,9 +33,14 @@ Future<Response> request(OptionsRequest optionsReq) async {
 }
 
 class OptionsRequest {
-  FormData? body;
+  Map<String, dynamic>? body;
   List<String> endpointPath;
   Map<String, dynamic>? queryParam;
+  Bool? isFormData;
 
-  OptionsRequest({this.body, required this.endpointPath, this.queryParam});
+  OptionsRequest(
+      {this.body,
+      required this.endpointPath,
+      this.queryParam,
+      this.isFormData});
 }
