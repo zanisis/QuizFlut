@@ -1,7 +1,7 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:edproject/dataSource/course_datasource.dart';
 import 'package:edproject/model/course_model.dart';
-import 'package:meta/meta.dart';
 
 part 'course_event.dart';
 part 'course_state.dart';

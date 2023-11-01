@@ -1,7 +1,7 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:edproject/dataSource/baner_datasource.dart';
 import 'package:edproject/model/banner_model.dart';
-import 'package:meta/meta.dart';
 
 part 'banner_event.dart';
 part 'banner_state.dart';

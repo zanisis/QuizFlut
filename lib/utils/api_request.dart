@@ -9,8 +9,8 @@ Future<Response> request(OptionsRequest optionsReq) async {
 
   final optionsSetup = BaseOptions(
       baseUrl: 'https://edspert.widyaedu.com',
-      connectTimeout: const Duration(seconds: 5),
-      receiveTimeout: const Duration(seconds: 3),
+      connectTimeout: const Duration(seconds: 60),
+      receiveTimeout: const Duration(seconds: 60),
       headers: {"x-api-key": dotenv.env["API_KEY"]});
 
   final dio = Dio(optionsSetup);
@@ -30,17 +30,9 @@ Future<Response> request(OptionsRequest optionsReq) async {
 }
 
 class OptionsRequest {
-  BodyRequest? body;
+  FormData? body;
   List<String> endpointPath;
   Map<String, dynamic>? queryParam;
 
   OptionsRequest({this.body, required this.endpointPath, this.queryParam});
-}
-
-class BodyRequest {
-  String? data;
-
-  BodyRequest({
-    this.data,
-  });
 }

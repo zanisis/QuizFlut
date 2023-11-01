@@ -62,7 +62,8 @@ class _ExerciseCoursePageState extends State<ExerciseCoursePage> {
               ),
             ),
             const SizedBox(height: 12),
-            exerciseCourseResponse!.data!.isEmpty
+            exerciseCourseResponse?.data != null &&
+                    exerciseCourseResponse!.data!.isEmpty
                 ? Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
