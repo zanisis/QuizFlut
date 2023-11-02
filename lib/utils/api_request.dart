@@ -8,6 +8,14 @@ Future<Response> request(OptionsRequest optionsReq) async {
   final method = optionsReq.endpointPath[0];
   final path = optionsReq.endpointPath[1];
 
+  Object finalData;
+
+  if (optionsReq.isFormData != null) {
+    finalData = FormData.fromMap(optionsReq.body ?? {});
+  } else {
+    finalData = optionsReq.body ?? {};
+  }
+
   final optionsSetup = BaseOptions(
       baseUrl: 'https://edspert.widyaedu.com',
       connectTimeout: const Duration(seconds: 60),
@@ -19,9 +27,7 @@ Future<Response> request(OptionsRequest optionsReq) async {
   try {
     final response = await dio.request(
       path,
-      data: optionsReq.isFormData != null
-          ? FormData.fromMap(optionsReq.body ?? {})
-          : optionsReq.body,
+      data: finalData,
       queryParameters: optionsReq.queryParam,
       options: Options(method: method),
     );
