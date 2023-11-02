@@ -1,13 +1,20 @@
+import 'package:edproject/bloc/auth/bloc/auth_bloc.dart';
 import 'package:edproject/bloc/banner/banner_bloc.dart';
 import 'package:edproject/bloc/course/course_bloc.dart';
-import 'package:edproject/pages/home_page.dart';
-// import 'package:edproject/pages/splash_page.dart';
+import 'package:edproject/firebase_options.dart';
+// import 'package:edproject/pages/home_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:edproject/pages/splash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   await dotenv.load();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   runApp(const MyApp());
 }
 
@@ -19,6 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(create: (context) => AuthBloc()),
         BlocProvider(create: (context) => CourseBloc()..add(CourseGetEvent())),
         BlocProvider(create: (context) => BannerBloc()..add(BannerGetEvent()))
       ],
@@ -44,7 +52,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const HomePage(),
+        home: const SplashPage(),
       ),
     );
   }

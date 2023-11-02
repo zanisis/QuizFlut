@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "378941456442",
+    "project_id": "edspert19",
+    "storage_bucket": "edspert19.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:378941456442:android:6ce51b0a338243b07e7503",
+        "android_client_info": {
+          "package_name": "com.example.edproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "378941456442-vjv384j1adbu6i90iim1ug81qfr1dp6h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.edproject",
+            "certificate_hash": "c302924ffa74be8c088da82a7f848fdce36938e1"
+          }
+        },
+        {
+          "client_id": "378941456442-hnrtnnsnfs7vn5u5hgl4drn3anja4uun.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFWlNOvCpzam3GACFHUbuq-2h9yydgpEI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "378941456442-hnrtnnsnfs7vn5u5hgl4drn3anja4uun.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "378941456442-q3n9eu6bhn8bffqsgeupvh6v5r42ek24.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.edproject"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -24,7 +24,6 @@ class _ExerciseCoursePageState extends State<ExerciseCoursePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     getInit();
     super.initState();
   }
@@ -39,14 +38,18 @@ class _ExerciseCoursePageState extends State<ExerciseCoursePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: const Color(0xff3A7FD5),
-          iconTheme: const IconThemeData(color: Colors.white),
-          title: Text(widget.courseName,
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w700))),
+        backgroundColor: const Color(0xff3A7FD5),
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: Text(
+          widget.courseName,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
       body: Container(
         color: const Color(0xffF3F7F8),
         padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),

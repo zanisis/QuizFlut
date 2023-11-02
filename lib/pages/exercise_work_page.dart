@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:edproject/dataSource/exercise_work_datasource.dart';
 import 'package:edproject/model/exercise_work_model.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +25,6 @@ class _ExerciseWorkPageState extends State<ExerciseWorkPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     getInit();
     super.initState();
   }
@@ -71,7 +68,6 @@ class _ExerciseWorkPageState extends State<ExerciseWorkPage> {
   @override
   Widget build(BuildContext context) {
     final workExerciseData = exerciseWorkResponse?.data?[indexExercise];
-    log("save: ${lockAnswer}");
 
     return Scaffold(
       backgroundColor: const Color(0xffF3F7F8),

@@ -1,8 +1,37 @@
+import 'package:edproject/bloc/auth/bloc/auth_bloc.dart';
+import 'package:edproject/dataSource/user_datasource.dart';
+import 'package:edproject/model/user_model.dart';
+import 'package:edproject/pages/register_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class AuthPage extends StatelessWidget {
+class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
+
+  @override
+  State<AuthPage> createState() => _AuthPageState();
+}
+
+class _AuthPageState extends State<AuthPage> {
+  final userDataSource = UserDataSource();
+
+  UserResponse? userResponse;
+
+  void checkGetUser(BuildContext context, String email) async {
+    userResponse = await userDataSource.getUser(email);
+
+    if (userResponse?.data?.iduser == '0') {
+      if (context.mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const RegisterPage(),
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,50 +73,64 @@ class AuthPage extends StatelessWidget {
             ]),
           ),
           Expanded(
-            child: Container(
-              padding: const EdgeInsets.only(left: 32, right: 32, bottom: 91),
-              child:
-                  Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-                SizedBox(
-                  height: 50,
-                  child: ElevatedButton(
-                      onPressed: () {},
-                      child: Row(
-                        children: [
-                          Image.asset('assets/icons/google-logo.png'),
-                          const SizedBox(width: 12),
-                          const Text('Masuk dengan Google',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontFamily: 'Poppins',
-                                fontSize: 17,
-                                color: Color(0xff1A1F26),
-                              )),
-                        ],
-                      )),
+            child: BlocListener<AuthBloc, AuthState>(
+              listener: (context, state) {
+                if (state is AuthGoogleSignSuccess) {
+                  if (state.userCredential != null) {
+                    checkGetUser(
+                        context, state.userCredential?.user?.email ?? '');
+                  }
+                }
+              },
+              child: Container(
+                padding: const EdgeInsets.only(left: 32, right: 32, bottom: 91),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SizedBox(
+                      height: 50,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            context.read<AuthBloc>().add(SignInGoogleEvent());
+                          },
+                          child: Row(
+                            children: [
+                              Image.asset('assets/icons/google-logo.png'),
+                              const SizedBox(width: 12),
+                              const Text('Masuk dengan Google',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Poppins',
+                                    fontSize: 17,
+                                    color: Color(0xff1A1F26),
+                                  )),
+                            ],
+                          )),
+                    ),
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      height: 50,
+                      child: ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black),
+                          child: Row(
+                            children: [
+                              SvgPicture.asset('assets/icons/apple-logo.svg'),
+                              const SizedBox(width: 12),
+                              const Text('Masuk dengan Apple ID',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Poppins',
+                                    fontSize: 17,
+                                    color: Color(0xffffffff),
+                                  )),
+                            ],
+                          )),
+                    )
+                  ],
                 ),
-                const SizedBox(height: 12),
-                SizedBox(
-                  height: 50,
-                  child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset('assets/icons/apple-logo.svg'),
-                          const SizedBox(width: 12),
-                          const Text('Masuk dengan Apple ID',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontFamily: 'Poppins',
-                                fontSize: 17,
-                                color: Color(0xffffffff),
-                              )),
-                        ],
-                      )),
-                )
-              ]),
+              ),
             ),
           )
         ],
