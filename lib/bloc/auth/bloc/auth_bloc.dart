@@ -10,7 +10,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final authDataSource = AuthDataSource();
   AuthBloc() : super(AuthInitial()) {
     on<AuthEvent>((event, emit) async {
-      // TODO: implement event handler
       emit(AuthGoogleSignLoading());
 
       final userCredential = await authDataSource.signInWithGoogle();

@@ -72,8 +72,10 @@ class _ExerciseWorkPageState extends State<ExerciseWorkPage> {
     return Scaffold(
       backgroundColor: const Color(0xffF3F7F8),
       appBar: AppBar(
-        title:
-            const Text('Latihan Soal', style: TextStyle(color: Colors.white)),
+        title: const Text(
+          'Latihan Soal',
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
         backgroundColor: const Color(0xff3A7FD5),
         leading: const BackButton(color: Colors.white),

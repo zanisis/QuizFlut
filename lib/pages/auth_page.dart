@@ -48,29 +48,31 @@ class _AuthPageState extends State<AuthPage> {
         children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: Column(children: [
-              SvgPicture.asset(
-                'assets/icons/analysis.svg',
-              ),
-              const SizedBox(height: 50),
-              const Text(
-                'Selamat Datang',
-                style: TextStyle(
+            child: Column(
+              children: [
+                SvgPicture.asset(
+                  'assets/icons/analysis.svg',
+                ),
+                const SizedBox(height: 50),
+                const Text(
+                  'Selamat Datang',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Poppins',
+                      fontSize: 22),
+                ),
+                const Text(
+                  'Selamat Datang di Aplikasi Widya Edu\nAplikasi Latihan dan Konsultasi Soal',
+                  style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Poppins',
-                    fontSize: 22),
-              ),
-              const Text(
-                'Selamat Datang di Aplikasi Widya Edu\nAplikasi Latihan dan Konsultasi Soal',
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontFamily: 'Poppins',
-                  fontSize: 14,
-                  color: Color(0xff6A7483),
+                    fontSize: 14,
+                    color: Color(0xff6A7483),
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
-            ]),
+              ],
+            ),
           ),
           Expanded(
             child: BlocListener<AuthBloc, AuthState>(
@@ -107,27 +109,6 @@ class _AuthPageState extends State<AuthPage> {
                             ],
                           )),
                     ),
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      height: 50,
-                      child: ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black),
-                          child: Row(
-                            children: [
-                              SvgPicture.asset('assets/icons/apple-logo.svg'),
-                              const SizedBox(width: 12),
-                              const Text('Masuk dengan Apple ID',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: 'Poppins',
-                                    fontSize: 17,
-                                    color: Color(0xffffffff),
-                                  )),
-                            ],
-                          )),
-                    )
                   ],
                 ),
               ),
