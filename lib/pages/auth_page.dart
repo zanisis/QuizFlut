@@ -26,7 +26,7 @@ class _AuthPageState extends State<AuthPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const RegisterPage(),
+            builder: (context) => RegisterPage(email: email),
           ),
         );
       }
