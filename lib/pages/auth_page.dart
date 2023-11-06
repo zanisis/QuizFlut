@@ -1,6 +1,5 @@
 import 'package:edproject/bloc/auth/bloc/auth_bloc.dart';
-import 'package:edproject/dataSource/user_datasource.dart';
-import 'package:edproject/model/user_model.dart';
+import 'package:edproject/pages/home_page.dart';
 import 'package:edproject/pages/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,25 +13,6 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
-  final userDataSource = UserDataSource();
-
-  UserResponse? userResponse;
-
-  void checkGetUser(BuildContext context, String email) async {
-    userResponse = await userDataSource.getUser(email);
-
-    if (userResponse?.data?.iduser == '0') {
-      if (context.mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => RegisterPage(email: email),
-          ),
-        );
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,8 +59,25 @@ class _AuthPageState extends State<AuthPage> {
               listener: (context, state) {
                 if (state is AuthGoogleSignSuccess) {
                   if (state.userCredential != null) {
-                    checkGetUser(
-                        context, state.userCredential?.user?.email ?? '');
+                    context.read<AuthBloc>().add(GetUserAuth(
+                        email: state.userCredential?.user?.email ?? ''));
+                  }
+                }
+                if (state is GetUserAuthSuccess) {
+                  if (state.userResponse?.data?.iduser == '0') {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RegisterPage(email: state.email),
+                      ),
+                    );
+                  } else {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HomePage(),
+                      ),
+                    );
                   }
                 }
               },

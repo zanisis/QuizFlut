@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:edproject/dataSource/course_datasource.dart';
@@ -16,8 +14,6 @@ class CourseBloc extends Bloc<CourseEvent, CourseState> {
       emit(CourseLoading());
 
       final courseResponse = await courseDataSource.getCourse();
-
-      log("response: ${courseResponse.toJson()}");
 
       emit(CourseSuccess(courseResponse: courseResponse));
     });

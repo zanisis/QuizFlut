@@ -4,4 +4,5 @@ class EndpointConstants {
   static List<String> exerciseCourseGet = ["GET", "/exercise/data_exercise"];
   static List<String> exerciseWorkPost = ["POST", "/exercise/kerjakan"];
   static List<String> userGet = ["GET", "/users"];
+  static List<String> registerPost = ["POST", "/users/registrasi"];
 }

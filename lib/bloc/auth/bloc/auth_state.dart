@@ -12,3 +12,12 @@ final class AuthGoogleSignSuccess extends AuthState {
 
   AuthGoogleSignSuccess({required this.userCredential});
 }
+
+final class GetUserAuthLoading extends AuthState {}
+
+final class GetUserAuthSuccess extends AuthState {
+  final UserResponse? userResponse;
+  final String email;
+
+  GetUserAuthSuccess({required this.userResponse, required this.email});
+}

@@ -2,7 +2,6 @@ import 'package:edproject/bloc/auth/bloc/auth_bloc.dart';
 import 'package:edproject/bloc/banner/banner_bloc.dart';
 import 'package:edproject/bloc/course/course_bloc.dart';
 import 'package:edproject/firebase_options.dart';
-// import 'package:edproject/pages/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:edproject/pages/splash_page.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +50,7 @@ class MyApp extends StatelessWidget {
           // tested with just a hot reload.
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
-          inputDecorationTheme: InputDecorationTheme(
+          inputDecorationTheme: const InputDecorationTheme(
             border: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.red),
             ),
