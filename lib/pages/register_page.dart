@@ -16,7 +16,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   String genderField = '';
-  String classField = '';
+  String? classField;
 
   TextEditingController nameField = TextEditingController();
   TextEditingController schoolField = TextEditingController();
@@ -56,8 +56,8 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffF3F7F8),
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: const Text(
           'Yuk isi data diri',
           style: TextStyle(
@@ -77,6 +77,7 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Form(
           key: _formKey,
           child: Container(
+            color: const Color(0xffF3F7F8),
             padding: const EdgeInsets.all(24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -251,20 +252,39 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         const SizedBox(height: 6),
                         Container(
-                          decoration: const BoxDecoration(color: Colors.white),
-                          child: DropdownMenu(
-                            onSelected: (value) {
-                              classField = value!;
-                              setState(() {});
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                                color: const Color(0xffD6D6D6),
+                                width: 1,
+                                style: BorderStyle.solid),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(5),
+                            ),
+                          ),
+                          child: DropdownButton<String>(
+                            isExpanded: true,
+                            hint: const Text(
+                              'Pilih Kelas',
+                              style: TextStyle(
+                                color: Color(0xffD3D3D3),
+                              ),
+                            ),
+                            value: classField,
+                            onChanged: (String? value) {
+                              // This is called when the user selects an item.
+                              setState(() {
+                                classField = value!;
+                              });
                             },
-                            width: 200,
-                            initialSelection: classSchool.first,
-                            hintText: "Pilih Kelas",
-                            dropdownMenuEntries: classSchool
-                                .map<DropdownMenuEntry<String>>((value) =>
-                                    DropdownMenuEntry(
-                                        value: value, label: value))
-                                .toList(),
+                            items: classSchool
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
                           ),
                         )
                       ],
@@ -318,8 +338,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       } else {}
                     },
                     style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.all(21),
-                        backgroundColor: const Color(0xff3A7FD5)),
+                      padding: const EdgeInsets.all(21),
+                      backgroundColor: const Color(0xff3A7FD5),
+                    ),
                     child: const Text(
                       'DAFTAR',
                       style: TextStyle(color: Colors.white),
