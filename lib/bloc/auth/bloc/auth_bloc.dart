@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:edproject/dataSource/user_datasource.dart';
 import 'package:edproject/model/user_model.dart';
 import 'package:flutter/widgets.dart';
@@ -25,7 +23,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(GetUserAuthLoading());
 
       final userResponse = await userDataSource.getUser(event.email);
-      log("response: ${userResponse.toJson()}");
+
       emit(GetUserAuthSuccess(userResponse: userResponse, email: event.email));
     });
   }

@@ -1,8 +1,10 @@
 import 'package:edproject/dataSource/exercise_work_datasource.dart';
 import 'package:edproject/model/exercise_work_model.dart';
+import 'package:edproject/model/score_exercise_model.dart';
+import 'package:edproject/widget/modal/score_modal_widget.dart';
+import 'package:edproject/widget/modal/submit_modal_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 enum Answer { A, B, C, D, E }
 
@@ -17,11 +19,13 @@ class ExerciseWorkPage extends StatefulWidget {
 
 class _ExerciseWorkPageState extends State<ExerciseWorkPage> {
   final exerciseWorkDataSource = ExerciseWorkDataSource();
+
   int indexExercise = 0;
-  String answerQuestion = '';
   Map<String, String> lockAnswer = {};
 
   ExerciseWorkResponse? exerciseWorkResponse;
+  ExerciseWorkResponse? submitExerciseWorkResponse;
+  ScoreExerciseResponse? scoreExerciseResponse;
 
   @override
   void initState() {
@@ -36,33 +40,75 @@ class _ExerciseWorkPageState extends State<ExerciseWorkPage> {
     setState(() {});
   }
 
-  void selectedAnswer(int index) {
+  void selectedAnswer(int index, String bankQuestion) {
     if (index == 0) {
-      answerQuestion = Answer.A.toString();
+      lockAnswer[bankQuestion] = Answer.A.name;
     } else if (index == 1) {
-      answerQuestion = Answer.B.toString();
+      lockAnswer[bankQuestion] = Answer.B.name;
     } else if (index == 2) {
-      answerQuestion = Answer.C.toString();
+      lockAnswer[bankQuestion] = Answer.C.name;
     } else {
-      answerQuestion = Answer.D.toString();
+      lockAnswer[bankQuestion] = Answer.D.name;
     }
+
     setState(() {});
   }
 
-  void nextQuestion(String bankQuestion) {
+  void nextQuestion() {
     setState(() {
-      lockAnswer[bankQuestion] = answerQuestion;
       indexExercise = indexExercise + 1;
-      answerQuestion = '';
     });
   }
 
-  void submitAnswer(String bankQuestion) {
-    setState(() {
-      lockAnswer[bankQuestion] = answerQuestion;
-      // indexExercise = 0;
-      // answerQuestion = '';
-    });
+  void submitAnswer(BuildContext context) async {
+    List<String> bankQuestionId = lockAnswer.keys.toList();
+    List<String> studentAnswer = lockAnswer.values.toList();
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return WillPopScope(
+          child: const Center(
+            child: CircularProgressIndicator(
+              color: Colors.white,
+            ),
+          ),
+          onWillPop: () async {
+            return false;
+          },
+        );
+      },
+    );
+    submitExerciseWorkResponse =
+        await exerciseWorkDataSource.submitExerciseWork(
+      SubmitExercise(
+        exerciseId: widget.exerciseId,
+        bankQuestionId: bankQuestionId,
+        studentAnswer: studentAnswer,
+      ),
+    );
+    if (submitExerciseWorkResponse?.message == 'Sukses input jawaban') {
+      scoreExerciseResponse =
+          await exerciseWorkDataSource.getScoreExercise(widget.exerciseId);
+
+      if (mounted) {
+        Navigator.pop(context);
+        Navigator.pop(context);
+        modalScore(context);
+      }
+    }
+  }
+
+  Future<dynamic> modalScore(BuildContext context) {
+    return showModalBottomSheet(
+      backgroundColor: const Color(0xff3A7FD5),
+      isScrollControlled: true,
+      enableDrag: false,
+      context: context,
+      builder: (context) =>
+          ScoreModalWidget(scoreExerciseResponse: scoreExerciseResponse),
+    );
   }
 
   @override
@@ -164,9 +210,7 @@ class _ExerciseWorkPageState extends State<ExerciseWorkPage> {
                                               0) -
                                           1)
                                     {
-                                      nextQuestion(
-                                          workExerciseData?.bankQuestionId ??
-                                              ''),
+                                      nextQuestion(),
                                     }
                                   else
                                     {modalSubmit(context, workExerciseData)}
@@ -199,137 +243,60 @@ class _ExerciseWorkPageState extends State<ExerciseWorkPage> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(38),
-        width: double.infinity,
-        height: MediaQuery.of(context).size.height * 0.40,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(25.0),
-            topRight: Radius.circular(25.0),
-          ),
-        ),
-        child: Column(children: [
-          SvgPicture.asset('assets/icons/diamon-answer.svg'),
-          const SizedBox(height: 4),
-          const Text(
-            'Kumpulkan latihan soal sekarang?',
-            style: TextStyle(
-              fontSize: 12,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const Text(
-            'Boleh langsung kumpulin dong',
-            style: TextStyle(
-              color: Color(0xff9C9C9C),
-              fontSize: 12,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 30),
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(5),
-                      ),
-                    ),
-                    side: const BorderSide(
-                      color: Color(0xff3A7FD5),
-                      width: 1,
-                    ),
-                  ),
-                  child: const Text(
-                    'Nanti dulu',
-                    style: TextStyle(color: Color(0xff3A7FD5)),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 4),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    submitAnswer(workExerciseData?.bankQuestionId ?? '');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff3A7FD5),
-                    shape: const BeveledRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(5),
-                      ),
-                    ),
-                  ),
-                  child: const Text(
-                    'Ya',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-            ],
-          )
-        ]),
-      ),
+      builder: (context) => SubmitModalWidget(submitAnswer: submitAnswer),
     );
   }
 
   ListView optionalAnswer(ExerciseWorkData? workExerciseData) {
     return ListView.separated(
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {
-              selectedAnswer(index);
-            },
-            child: Card(
-              child: Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                    color: (() {
-                      if ((answerQuestion == Answer.A.toString() &&
-                              index == 0) ||
-                          (answerQuestion == Answer.B.toString() &&
-                              index == 1) ||
-                          (answerQuestion == Answer.C.toString() &&
-                              index == 2) ||
-                          (answerQuestion == Answer.D.toString() &&
-                              index == 3)) {
-                        return const Color.fromRGBO(58, 127, 213, 0.71);
+      itemBuilder: (context, index) {
+        String? bankQuestion = workExerciseData?.bankQuestionId ?? '';
+        return GestureDetector(
+          onTap: () {
+            selectedAnswer(index, bankQuestion);
+          },
+          child: Card(
+            child: Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                  color: (() {
+                    if ((lockAnswer[bankQuestion] == Answer.A.name &&
+                            index == 0) ||
+                        (lockAnswer[bankQuestion] == Answer.B.name &&
+                            index == 1) ||
+                        (lockAnswer[bankQuestion] == Answer.C.name &&
+                            index == 2) ||
+                        (lockAnswer[bankQuestion] == Answer.D.name &&
+                            index == 3)) {
+                      return const Color.fromRGBO(58, 127, 213, 0.71);
+                    }
+                    return Colors.transparent;
+                  })(),
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  border: Border.all(
+                    style: BorderStyle.solid,
+                    width: 1,
+                    color: const Color(0xffC9C9C9),
+                  )),
+              child: Row(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(left: 12),
+                    child: Text((() {
+                      if (index == 0) {
+                        return 'A';
+                      } else if (index == 1) {
+                        return 'B';
+                      } else if (index == 2) {
+                        return 'C';
+                      } else {
+                        return 'D';
                       }
-                      return Colors.transparent;
-                    })(),
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    border: Border.all(
-                      style: BorderStyle.solid,
-                      width: 1,
-                      color: const Color(0xffC9C9C9),
-                    )),
-                child: Row(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(left: 12),
-                      child: Text((() {
-                        if (index == 0) {
-                          return 'A';
-                        } else if (index == 1) {
-                          return 'B';
-                        } else if (index == 2) {
-                          return 'C';
-                        } else {
-                          return 'D';
-                        }
-                      })()),
-                    ),
-                    Expanded(
-                      child: Html(data: (() {
+                    })()),
+                  ),
+                  Expanded(
+                    child: Html(
+                      data: (() {
                         if (index == 0) {
                           return workExerciseData?.optionA ?? '';
                         } else if (index == 1) {
@@ -339,17 +306,19 @@ class _ExerciseWorkPageState extends State<ExerciseWorkPage> {
                         } else if (index == 3) {
                           return workExerciseData?.optionD ?? '';
                         }
-                      })()),
+                      })(),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          );
-        },
-        separatorBuilder: (context, index) => const SizedBox(height: 12),
-        itemCount: 4,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics());
+          ),
+        );
+      },
+      separatorBuilder: (context, index) => const SizedBox(height: 12),
+      itemCount: 4,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+    );
   }
 }

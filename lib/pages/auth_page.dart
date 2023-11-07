@@ -65,6 +65,7 @@ class _AuthPageState extends State<AuthPage> {
                 }
                 if (state is GetUserAuthSuccess) {
                   if (state.userResponse?.data?.iduser == '0') {
+                    Navigator.pop(context);
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -72,6 +73,7 @@ class _AuthPageState extends State<AuthPage> {
                       ),
                     );
                   } else {
+                    Navigator.pop(context);
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -90,6 +92,22 @@ class _AuthPageState extends State<AuthPage> {
                       height: 50,
                       child: ElevatedButton(
                           onPressed: () {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (context) {
+                                return WillPopScope(
+                                  child: const Center(
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  onWillPop: () async {
+                                    return false;
+                                  },
+                                );
+                              },
+                            );
                             context.read<AuthBloc>().add(SignInGoogleEvent());
                           },
                           child: Row(
