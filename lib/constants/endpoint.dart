@@ -10,4 +10,5 @@ class EndpointConstants {
   static List<String> scoreExerciseWorkGet = ["GET", "/exercise/score_result"];
   static List<String> userGet = ["GET", "/users"];
   static List<String> registerPost = ["POST", "/users/registrasi"];
+  static List<String> updateProfilePost = ["POST", "/users/update"];
 }

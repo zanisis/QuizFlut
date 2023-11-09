@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:edproject/bloc/auth/bloc/auth_bloc.dart';
 import 'package:edproject/pages/auth_page.dart';
 import 'package:edproject/pages/home_page.dart';

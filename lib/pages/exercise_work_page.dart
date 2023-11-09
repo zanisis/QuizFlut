@@ -210,7 +210,19 @@ class _ExerciseWorkPageState extends State<ExerciseWorkPage> {
                                               0) -
                                           1)
                                     {
-                                      nextQuestion(),
+                                      if ((lockAnswer.length - 1) <
+                                          indexExercise)
+                                        {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content:
+                                                  Text('Pilih jawaban dahulu'),
+                                            ),
+                                          )
+                                        }
+                                      else
+                                        {nextQuestion()}
                                     }
                                   else
                                     {modalSubmit(context, workExerciseData)}

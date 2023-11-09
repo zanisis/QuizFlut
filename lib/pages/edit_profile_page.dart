@@ -1,5 +1,7 @@
 import 'package:edproject/bloc/auth/bloc/auth_bloc.dart';
 import 'package:edproject/constants/variable.dart';
+import 'package:edproject/dataSource/user_datasource.dart';
+import 'package:edproject/model/register_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,7 +13,11 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  String? dropdownValue;
+  String? genderValue;
+  bool isLoading = false;
+
+  final userDataSource = UserDataSource();
+  RegisterResponse? userUpdateResponse;
 
   TextEditingController nameFieldControl = TextEditingController();
   TextEditingController classFieldControl = TextEditingController();
@@ -29,7 +35,37 @@ class _EditProfilePageState extends State<EditProfilePage> {
       nameFieldControl.text = state.userResponse?.data?.userName ?? '';
       classFieldControl.text = state.userResponse?.data?.kelas ?? '';
       schoolFieldControl.text = state.userResponse?.data?.userAsalSekolah ?? '';
-      dropdownValue = state.userResponse?.data?.userGender ?? '';
+      genderValue = state.userResponse?.data?.userGender ?? '';
+    }
+  }
+
+  void updateProfile() async {
+    setState(() {
+      isLoading = true;
+    });
+    final state = context.read<AuthBloc>().state;
+    Map<String, dynamic> data = {};
+    data["nama_lengkap"] = nameFieldControl.text;
+    data["nama_sekolah"] = schoolFieldControl.text;
+    data["kelas"] = classFieldControl.text;
+    data["gender"] = genderValue;
+    data["foto"] = 'url';
+    if (state is GetUserAuthSuccess) {
+      data["email"] = state.email;
+    }
+
+    userUpdateResponse = await userDataSource.updateUser(data);
+
+    if (userUpdateResponse?.message == 'update sukses') {
+      if (context.mounted) {
+        context.read<AuthBloc>().add(
+              GetUserAuth(email: userUpdateResponse?.data?.userEmail ?? ''),
+            );
+        setState(() {
+          isLoading = false;
+        });
+        Navigator.of(context).pop();
+      }
     }
   }
 
@@ -152,7 +188,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               color: Color(0xff99A1AC),
                             ),
                           ),
-                          value: dropdownValue,
+                          value: genderValue,
                           elevation: 16,
                           underline: Container(
                             height: 1,
@@ -161,7 +197,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           onChanged: (String? value) {
                             // This is called when the user selects an item.
                             setState(() {
-                              dropdownValue = value!;
+                              genderValue = value!;
                             });
                           },
                           items: VariableName.genderList
@@ -238,7 +274,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          isLoading ? null : updateProfile();
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xff3A7FD5),
                           shape: const RoundedRectangleBorder(
@@ -251,10 +289,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             width: 1,
                           ),
                         ),
-                        child: const Text(
-                          'Perbarui Data',
-                          style: TextStyle(color: Colors.white),
-                        ),
+                        child: isLoading
+                            ? const CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                            : const Text(
+                                'Perbarui Data',
+                                style: TextStyle(color: Colors.white),
+                              ),
                       ),
                     ),
                   ],

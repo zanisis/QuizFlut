@@ -6,9 +6,13 @@ import 'package:edproject/utils/api_request.dart';
 class UserDataSource {
   Future<UserResponse> getUser(String email) async {
     final response = await request(
-        OptionsRequest(endpointPath: EndpointConstants.userGet, queryParam: {
-      "email": email,
-    }));
+      OptionsRequest(
+        endpointPath: EndpointConstants.userGet,
+        queryParam: {
+          "email": email,
+        },
+      ),
+    );
 
     final userResponse = UserResponse.fromJson(response.data);
 
@@ -16,13 +20,27 @@ class UserDataSource {
   }
 
   Future<RegisterResponse> postRegister(Map<String, dynamic> data) async {
-    final response = await request(OptionsRequest(
-      endpointPath: EndpointConstants.registerPost,
-      body: data,
-    ));
+    final response = await request(
+      OptionsRequest(
+        endpointPath: EndpointConstants.registerPost,
+        body: data,
+      ),
+    );
 
     final registerResponse = RegisterResponse.fromJson(response.data);
 
     return registerResponse;
+  }
+
+  Future<RegisterResponse> updateUser(Map<String, dynamic> data) async {
+    final response = await request(
+      OptionsRequest(
+        endpointPath: EndpointConstants.updateProfilePost,
+        body: data,
+      ),
+    );
+    final updateResponse = RegisterResponse.fromJson(response.data);
+
+    return updateResponse;
   }
 }

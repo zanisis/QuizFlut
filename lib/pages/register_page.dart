@@ -16,7 +16,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   String genderField = '';
-  String? classField;
+  String? degree;
 
   TextEditingController nameField = TextEditingController();
   TextEditingController schoolField = TextEditingController();
@@ -39,7 +39,7 @@ class _RegisterPageState extends State<RegisterPage> {
     data["kelas"] = 1;
     data["gender"] = genderField;
     data["foto"] = 'url';
-    data["jenjang"] = classField;
+    data["jenjang"] = degree;
     registerResponse = await userDataSource.postRegister(data);
     if (registerResponse?.message == 'ok') {
       if (context.mounted) {
@@ -266,16 +266,16 @@ class _RegisterPageState extends State<RegisterPage> {
                           child: DropdownButton<String>(
                             isExpanded: true,
                             hint: const Text(
-                              'Pilih Kelas',
+                              'Jenjang',
                               style: TextStyle(
                                 color: Color(0xffD3D3D3),
                               ),
                             ),
-                            value: classField,
+                            value: degree,
                             onChanged: (String? value) {
                               // This is called when the user selects an item.
                               setState(() {
-                                classField = value!;
+                                degree = value!;
                               });
                             },
                             items: classSchool
